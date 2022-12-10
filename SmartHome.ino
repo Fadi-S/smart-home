@@ -1,20 +1,13 @@
+#include "Ultrasound.h"
 
-int IR1 = A4;
-
-int led = 13;
+Ultrasound echo(2, 3);
+int distance;
 
 void setup() {
   Serial.begin(115200);
-  
-  pinMode(IR1, INPUT);
-
-  pinMode(led, OUTPUT);
 }
 
 void loop() {
-  int sensorStatus = digitalRead(IR1);
+  // distance = echo.getDistance();
 
-  if(sensorStatus==1) {
-    digitalWrite(led, ! digitalRead(led));
-  }
 }
