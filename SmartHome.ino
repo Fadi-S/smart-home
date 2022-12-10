@@ -8,6 +8,6 @@ void setup() {
 }
 
 void loop() {
-  // distance = echo.getDistance();
+  distance = echo.getDistance();
 
 }
