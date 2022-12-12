@@ -1,14 +1,17 @@
 #include "Ultrasound.h"
 #include "Wifi.h"
-
 #include "Buzzer.h"
+#include "Led.h"
 
 //Ultrasound echo(14, 4);
-int distance;
+// int distance;
 
 Wifi wifi("Smart home", "password1234");
 
 Buzzer buzzer(4);
+
+Led yellowLed(14);
+Led redLed(12);
 
 bool loggedIn = false;
 const String password = "1234";
@@ -52,8 +55,8 @@ void loop() {
 
     loggedIn = true;
     failedAttempts = 0;
-    buzzer.startFor(200);
     wifi.setResponse("Logged In");
+    buzzer.startFor(200);
 
     // TODO Open door
 
@@ -62,6 +65,18 @@ void loop() {
 
   if(response == "/") {
     wifi.setResponse("Welcome home");
+    return;
+  }
+
+  if(response == "/led/red") {
+    redLed.toggle();
+    wifi.setResponse(redLed.isOn() ? "1" : "0");
+    return;
+  }
+
+  if(response == "/led/yellow") {
+    yellowLed.toggle();
+    wifi.setResponse(yellowLed.isOn() ? "1" : "0");
     return;
   }
 
