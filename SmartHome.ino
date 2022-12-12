@@ -2,16 +2,21 @@
 #include "Wifi.h"
 #include "Buzzer.h"
 #include "Led.h"
+#include "LCD.h"
+#include "Temperature.h"
 
 //Ultrasound echo(14, 4);
 // int distance;
 
 Wifi wifi("Smart home", "password1234");
 
-Buzzer buzzer(4);
+Buzzer buzzer(16);
 
-Led yellowLed(14);
-Led redLed(12);
+Led yellowLed(10);
+
+LCD lcd1(1);
+
+Temperature temp(5);
 
 bool loggedIn = false;
 const String password = "1234";
@@ -21,6 +26,8 @@ void setup() {
   Serial.begin(115200);
 
   wifi.setup();
+
+  lcd1.setup();
 
   Serial.println(wifi.getIpAddress());
 }
@@ -68,9 +75,15 @@ void loop() {
     return;
   }
 
-  if(response == "/led/red") {
-    redLed.toggle();
-    wifi.setResponse(redLed.isOn() ? "1" : "0");
+  if(response.startsWith("/text")) {
+    int start = response.indexOf("line=");
+
+    String text = response.substring(start+5, response.length());
+    text.replace("+", " ");
+
+    lcd1.setText2(text);
+
+    wifi.setResponse(text);
     return;
   }
 
@@ -80,13 +93,23 @@ void loop() {
     return;
   }
 
+    if(response == "/buzz") {
+    buzzer.startFor(200);
+    wifi.setResponse("Buzzed");
+    return;
+  }
+
   if(response == "/getTemperature") {
-    wifi.setResponse("25");
+    String temperature = temp.get();
+
+    lcd1.setText1("Temp: " + temperature + "C");
+    wifi.setResponse(temperature);
     return;
   }
 
   if(response == "/logout") {
     loggedIn = false;
+    wifi.setResponse("Logged Out");
     return;
   }
 
