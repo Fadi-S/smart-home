@@ -4,15 +4,12 @@
 #include "Led.h"
 #include "LCD.h"
 #include "Temperature.h"
+#include <SoftwareSerial.h>
 
-//Ultrasound echo(14, 4);
-// int distance;
 
 Wifi wifi("Smart home", "password1234");
 
-Buzzer buzzer(16);
-
-Led yellowLed(10);
+Led yellowLed('l');
 
 LCD lcd1(1);
 
@@ -24,6 +21,8 @@ int failedAttempts = 0;
 
 void setup() {
   Serial.begin(115200);
+  
+  Serial1.begin(115200);
 
   wifi.setup();
 
@@ -34,8 +33,9 @@ void setup() {
 
 void loop() {
   if(failedAttempts >= 3) {
-    buzzer.toggle(500, 5);
+    // buzzer.toggle(500, 5);
     failedAttempts--;
+    Serial1.println("a");
   }
 
   String response = wifi.getResponse();
@@ -63,7 +63,8 @@ void loop() {
     loggedIn = true;
     failedAttempts = 0;
     wifi.setResponse("Logged In");
-    buzzer.startFor(200);
+    // buzzer.startFor(200);
+    Serial1.println("b");
 
     // TODO Open door
 
@@ -88,13 +89,15 @@ void loop() {
   }
 
   if(response == "/led/yellow") {
+    Serial1.println("l");
+
     yellowLed.toggle();
     wifi.setResponse(yellowLed.isOn() ? "1" : "0");
     return;
   }
 
-    if(response == "/buzz") {
-    buzzer.startFor(200);
+  if(response == "/buzz") {
+    Serial1.println("b");
     wifi.setResponse("Buzzed");
     return;
   }
