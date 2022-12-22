@@ -1,12 +1,21 @@
 #include <Arduino.h>
+#include <DHT.h>
 #include "Temperature.h"
 
-Temperature::Temperature(int pin) {}
+#define DHTPIN 12
+#define DHTTYPE DHT22   // DHT 22  (AM2302)
+DHT dht(DHTPIN, DHTTYPE); 
 
-void Temperature::setup() {
+Temperature::Temperature(int pin) {
 
 }
 
+void Temperature::setup() {
+  dht.begin();
+}
+
 String Temperature::get() {
-  return "25";
+  float temp = dht.readTemperature();
+
+  return String(temp, 1);
 }

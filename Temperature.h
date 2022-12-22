@@ -1,6 +1,8 @@
 #ifndef Temperature_h
 #define Temperature_h
 
+#include <OneWire.h>
+#include <DallasTemperature.h>
 #include <Arduino.h>
 
 class Temperature {
