@@ -35,7 +35,10 @@ void setup() {
 
   waterLevel.setup();
 
-  Serial.println(wifi.getIpAddress());
+  String ip = wifi.getIpAddress();
+  Serial.println(ip);
+  lcd1.setText1(ip.substring(0, 7));
+  lcd1.setText2(ip.substring(7, ip.length()));
 }
 
 void loop() {
@@ -71,7 +74,7 @@ void loop() {
     failedAttempts = 0;
     wifi.setResponse("Logged In");
     // buzzer.startFor(200);
-    Serial1.println("d");
+    Serial1.println("o");
     Serial1.println("b");
 
     return;
@@ -141,7 +144,7 @@ void loop() {
 
   if(response == "/door") {
     wifi.setResponse("1");
-    Serial1.println("d");
+    Serial1.println("o");
     return;
   }
 

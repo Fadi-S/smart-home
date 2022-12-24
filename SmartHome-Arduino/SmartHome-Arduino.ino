@@ -11,7 +11,7 @@ Buzzer buzzer(7);
 
 int doorOpenAngle = 0;
 int doorCloseAngle = 180;
-int doorPin = 3;
+int doorPin = 6;
 bool doorOpen = false;
 int positionDoor = 0;
 Servo door;
@@ -27,9 +27,10 @@ void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  door.attach(doorPin);
-
   garage.attach(garagePin);
+
+  door.attach(doorPin);
+  door.write(doorCloseAngle);
 }
 
 
@@ -67,7 +68,7 @@ void loop() {
   }
 
 
-  if(content == 'd') {
+  if(content == 'o') {
     if(doorOpen)
       door.write(doorCloseAngle);
     else
